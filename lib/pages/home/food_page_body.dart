@@ -1,8 +1,13 @@
 import 'package:dots_indicator/dots_indicator.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:keroma/controllers/popular_product_controller.dart';
+import 'package:keroma/models/product_model.dart';
+import 'package:keroma/utils/app_constants.dart';
 import 'package:keroma/utils/colors.dart';
 import 'package:keroma/utils/dimension.dart';
+import 'package:keroma/widgets/app_column.dart';
 import 'package:keroma/widgets/big_text.dart';
 import 'package:keroma/widgets/icon_and_text_widget.dart';
 import 'package:keroma/widgets/small_text.dart';
@@ -26,7 +31,7 @@ class _FoodPageBodyState  extends State<FoodPageBody> {
     super.initState();
     pageController.addListener(() {
      setState(() {
-      _currPageValue= pageController.page!;//cannot be equall to null (the value)
+      _currPageValue= pageController.page!;//cannot be equally to null (the value)
        print("Current value is"+_currPageValue.toString());
       });
     });
@@ -41,27 +46,34 @@ class _FoodPageBodyState  extends State<FoodPageBody> {
     return Column(
       children: [
       //slider section
-      Container(
-      // color: Colors.redAccent, for design purposes
-      height: Dimensions.pageView,
-        child: PageView.builder(
-          controller: pageController,
-          itemCount: 5,
-          itemBuilder: (context, position) {
-            return _buildPageItem(position);
-          }), //PageView.builder
-    ),
+      GetBuilder<PopularProductController>(builder:(popularProducts){
+        return popularProducts.isLoaded?Container(
+          // color: Colors.redAccent, for design purposes
+          height: Dimensions.pageView,
+          child: PageView.builder(
+              controller: pageController,
+              itemCount: popularProducts.popularProductList.length,
+              itemBuilder: (context, position) {
+                return _buildPageItem(position, popularProducts.popularProductList[position]);
+              }), //PageView.builder
+        ):CircularProgressIndicator(
+          color: AppColors.mainColor,
+        );
+      }),
       //dot indicator
-      new DotsIndicator(
-      dotsCount: 5,
-      position: _currPageValue.toInt(),
-      decorator: DotsDecorator(
-      activeColor: AppColors.mainColor,
-      size: const Size.square(9.0),
-      activeSize: const Size(18.0, 9.0),
-      activeShape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5.0)),
-    ),
-    ),
+      GetBuilder<PopularProductController>(builder: (popularProducts){
+        return DotsIndicator(
+          dotsCount: popularProducts.popularProductList.isEmpty?1:popularProducts.popularProductList.length,
+          position: _currPageValue.toInt(),
+          decorator: DotsDecorator(
+            activeColor: AppColors.mainColor,
+            size: const Size.square(9.0),
+            activeSize: const Size(18.0, 9.0),
+            activeShape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5.0)),
+          ),
+        );
+        }
+      ),
       //Popular text
       SizedBox(height: Dimensions.height30,),
       Container(
@@ -69,7 +81,7 @@ class _FoodPageBodyState  extends State<FoodPageBody> {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
-            BigText(text: "Popular"),
+            BigText(text: "Recommended"),
             SizedBox(width: Dimensions.width10,),
             Container(
               margin: const EdgeInsets.only(bottom: 3),
@@ -84,8 +96,6 @@ class _FoodPageBodyState  extends State<FoodPageBody> {
         ),
       ),
       //list of food and images
-
-
           ListView.builder(//parent should have a height for it to work
               physics: NeverScrollableScrollPhysics(),
               shrinkWrap: true,
@@ -150,7 +160,7 @@ class _FoodPageBodyState  extends State<FoodPageBody> {
     ],
     );
   }
-  Widget _buildPageItem(int index){
+  Widget _buildPageItem(int index, ProductModel popularProduct){
     Matrix4 matrix = new Matrix4.identity();
     if(index==_currPageValue.floor()){
       var currScale = 1-(_currPageValue-index)*(1-_scaleFactor);
@@ -183,10 +193,10 @@ class _FoodPageBodyState  extends State<FoodPageBody> {
                 color: index.isEven?Color(0xFF69c5df):Color(0XFF9294cc),
                 image: DecorationImage(
                     fit: BoxFit.cover,
-                    image: AssetImage(
-                        "assets/image/food0.png"
-                    )
-                )
+                    image: NetworkImage(
+                        AppConstants.BASE_URL+"/uploads/"+popularProduct.img!
+                    ),
+                ),
             ),
           ),
           Align(
@@ -215,35 +225,7 @@ class _FoodPageBodyState  extends State<FoodPageBody> {
               ),
               child: Container(
                  padding: EdgeInsets.only(top: 15, left: 15, right: 15),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    BigText(text: "Smocha Large"),
-                    SizedBox(height: Dimensions.height10,),
-                    Row(
-                      children: [
-                        Wrap(
-                          children: List.generate(5, (index) => Icon(Icons.star, color: AppColors.mainColor, size: 15,)),
-                        ),
-                        SizedBox(width: 10,),
-                        SmallText(text: "4.5",),
-                        SizedBox(width: 10,),
-                        SmallText(text: "1234 ",),
-                        SizedBox(width: 10,),
-                        SmallText(text: "comments",),
-                      ],
-                    ),
-                    SizedBox(height: Dimensions.height20,),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        IconAndTextWidget(icon: Icons.circle_sharp,text: "Normal",iconColor: AppColors.iconColor1,),
-                        IconAndTextWidget(icon: Icons.location_on,text: "1.7 Km",iconColor: AppColors.mainColor,),
-                        IconAndTextWidget(icon: Icons.access_time_filled_rounded,text: "32 min",iconColor: AppColors.iconColor2,),
-                      ],
-                    )
-                  ],
-                )
+                child: AppColumn(text: popularProduct.name!),
               ),
             ),
           )
