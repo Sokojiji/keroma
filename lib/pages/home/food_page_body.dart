@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:keroma/controllers/popular_product_controller.dart';
+import 'package:keroma/controllers/recommended_product_controller.dart';
 import 'package:keroma/models/product_model.dart';
 import 'package:keroma/utils/app_constants.dart';
 import 'package:keroma/utils/colors.dart';
@@ -96,68 +97,75 @@ class _FoodPageBodyState  extends State<FoodPageBody> {
         ),
       ),
       //list of food and images
-          ListView.builder(//parent should have a height for it to work
-              physics: NeverScrollableScrollPhysics(),
-              shrinkWrap: true,
-              itemCount: 10,
-              itemBuilder: (context, index){
-                return Container(
-                  margin: EdgeInsets.only(left: Dimensions.width20, right: Dimensions.width20, bottom: Dimensions.height10),
-                  child: Row(
-                    children: [
-                      //Image section
-                      Container(
-                        width:Dimensions.listViewImgSize,
-                        height: Dimensions.listViewImgSize,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(Dimensions.radius20),
-                            color: Colors.white38,
-                            image: DecorationImage(
-                              fit: BoxFit.cover,
-                              image: AssetImage(
-                                  "assets/image/food1.png"
-                              ),
-                            )
-                        ),
-                      ),
-                      //text container
-                      Expanded(
-                        child: Container(
-                          height: Dimensions.listViewTextContSize,
-
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.only(
-                              topRight: Radius.circular(Dimensions.radius20),
-                              bottomRight: Radius.circular(Dimensions.radius20),
+          GetBuilder<RecommendedProductController>(
+            builder: (recommendedProduct) {
+              return recommendedProduct.isLoaded ?
+              ListView.builder(//parent should have a height for it to work
+                  physics: NeverScrollableScrollPhysics(),
+                  shrinkWrap: true,
+                  itemCount: recommendedProduct.recommendedProductList.length,
+                  itemBuilder: (context, index){
+                    return Container(
+                      margin: EdgeInsets.only(left: Dimensions.width20, right: Dimensions.width20, bottom: Dimensions.height10),
+                      child: Row(
+                        children: [
+                          //Image section
+                          Container(
+                            width:Dimensions.listViewImgSize,
+                            height: Dimensions.listViewImgSize,
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(Dimensions.radius20),
+                                color: Colors.white38,
+                                image: DecorationImage(
+                                  fit: BoxFit.cover,
+                                  image: NetworkImage(
+                                      AppConstants.BASE_URL+"/uploads/"+recommendedProduct.recommendedProductList[index].img!
+                                  ),
+                                )
                             ),
-                            color: Colors.white,
                           ),
-                            child: Padding(
-                              padding: EdgeInsets.only(left: Dimensions.width10, right: Dimensions.width10),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  BigText(text: "Mali safi Kanairo nzima!"),
-                                  SmallText(text: "Hotta than your shawrry, Upus!"),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      IconAndTextWidget(icon: Icons.circle_sharp,text: "Normal",iconColor: AppColors.iconColor1,),
-                                      IconAndTextWidget(icon: Icons.location_on,text: "1.7km",iconColor: AppColors.mainColor,),
-                                      IconAndTextWidget(icon: Icons.access_time_filled_rounded,text: "32min",iconColor: AppColors.iconColor2,),
-                                    ],
-                                  )
-                                ],
+                          //text container
+                          Expanded(
+                            child: Container(
+                              height: Dimensions.listViewTextContSize,
+
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.only(
+                                  topRight: Radius.circular(Dimensions.radius20),
+                                  bottomRight: Radius.circular(Dimensions.radius20),
+                                ),
+                                color: Colors.white,
                               ),
+                                child: Padding(
+                                  padding: EdgeInsets.only(left: Dimensions.width10, right: Dimensions.width10),
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      BigText(text: "Mali safi Kanairo nzima!"),
+                                      SmallText(text: "Hotta than your shawrry, Upus!"),
+                                      Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          IconAndTextWidget(icon: Icons.circle_sharp,text: "Normal",iconColor: AppColors.iconColor1,),
+                                          IconAndTextWidget(icon: Icons.location_on,text: "1.7km",iconColor: AppColors.mainColor,),
+                                          IconAndTextWidget(icon: Icons.access_time_filled_rounded,text: "32min",iconColor: AppColors.iconColor2,),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ),
                             ),
-                        ),
-                      )
-                    ],
-                  ),
-                );
-              }),
-        
-    ],
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+              )
+                  : CircularProgressIndicator(
+                color: AppColors.mainColor,
+              );
+            }),
+      ],
     );
   }
   Widget _buildPageItem(int index, ProductModel popularProduct){
