@@ -1,5 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:keroma/pages/home/main_food_page.dart';
 import 'package:keroma/utils/colors.dart';
 
 import 'package:keroma/utils/dimension.dart';
@@ -42,8 +45,13 @@ class PopularFoodDetail extends StatelessWidget{
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                  AppIcon(icon: Icons.arrow_back_ios),
-                AppIcon(icon: Icons.shopping_cart_checkout_outlined)
+                GestureDetector(
+                onTap: (){
+                  Get.to(()=>MainFoodPage());
+                },
+              child:
+                  AppIcon(icon: Icons.arrow_back_ios)),
+                  AppIcon(icon: Icons.shopping_cart_checkout_outlined)
               ],
           )),
           //Intro food

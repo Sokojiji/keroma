@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:keroma/controllers/popular_product_controller.dart';
 import 'package:keroma/controllers/recommended_product_controller.dart';
 import 'package:keroma/models/product_model.dart';
+import 'package:keroma/pages/food/popular_food_detail.dart';
 import 'package:keroma/utils/app_constants.dart';
 import 'package:keroma/utils/colors.dart';
 import 'package:keroma/utils/dimension.dart';
@@ -51,12 +52,17 @@ class _FoodPageBodyState  extends State<FoodPageBody> {
         return popularProducts.isLoaded?Container(
           // color: Colors.redAccent, for design purposes
           height: Dimensions.pageView,
-          child: PageView.builder(
-              controller: pageController,
-              itemCount: popularProducts.popularProductList.length,
-              itemBuilder: (context, position) {
-                return _buildPageItem(position, popularProducts.popularProductList[position]);
-              }), //PageView.builder
+          child: GestureDetector(
+            onTap: (){
+              Get.to(()=>PopularFoodDetail());
+            },
+            child: PageView.builder(
+                controller: pageController,
+                itemCount: popularProducts.popularProductList.length,
+                itemBuilder: (context, position) {
+                  return _buildPageItem(position, popularProducts.popularProductList[position]);
+                }),
+          ), //PageView.builder
         ):CircularProgressIndicator(
           color: AppColors.mainColor,
         );
@@ -119,7 +125,7 @@ class _FoodPageBodyState  extends State<FoodPageBody> {
                                 image: DecorationImage(
                                   fit: BoxFit.cover,
                                   image: NetworkImage(
-                                      AppConstants.BASE_URL+"/uploads/"+recommendedProduct.recommendedProductList[index].img!
+                                      AppConstants.BASE_URL+AppConstants.UPLOAD_URL+recommendedProduct.recommendedProductList[index].img!
                                   ),
                                 )
                             ),
@@ -141,7 +147,7 @@ class _FoodPageBodyState  extends State<FoodPageBody> {
                                   child: Column(
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
-                                      BigText(text: "Mali safi Kanairo nzima!"),
+                                      BigText(text: recommendedProduct.recommendedProductList[index].name!),
                                       SmallText(text: "Hotta than your shawrry, Upus!"),
                                       Row(
                                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -202,7 +208,7 @@ class _FoodPageBodyState  extends State<FoodPageBody> {
                 image: DecorationImage(
                     fit: BoxFit.cover,
                     image: NetworkImage(
-                        AppConstants.BASE_URL+"/uploads/"+popularProduct.img!
+                        AppConstants.BASE_URL+AppConstants.UPLOAD_URL+popularProduct.img!
                     ),
                 ),
             ),

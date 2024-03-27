@@ -4,6 +4,7 @@ import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:keroma/controllers/popular_product_controller.dart';
 import 'package:keroma/controllers/recommended_product_controller.dart';
 import 'package:keroma/pages/home/main_food_page.dart';
+import 'package:keroma/routes/route_helper.dart';
 import 'helper/dependencies.dart' as dep;Future<void> main() async {
 
 WidgetsFlutterBinding.ensureInitialized();
@@ -17,21 +18,19 @@ class MyApp extends StatelessWidget {
 @override
   Widget build(BuildContext context) {
     // Get.find<CartController>().getCartData();
-    return GetBuilder<PopularProductController>(builder: (_) {
-      return GetBuilder<RecommendedProductController>(builder: (_) {
+    Get.find<PopularProductController>().getPopularProductList();
+    Get.find<RecommendedProductController>().getRecommendedProductList();
+
+     {
         return GetMaterialApp(
           debugShowCheckedModeBanner: false,
           title: "Keroma",
           home: MainFoodPage(),
-          // initialRoute: RouteHelper.getInitial(),
+          initialRoute: RouteHelper.initial,
           // home: SplashScreen(),
          // initialRoute: RouteHelper.getSplashPage(),
          // getPages: RouteHelper.routes,
         );
-      });
-    });
-  }
+      }
+    }
 }
-
-
-
