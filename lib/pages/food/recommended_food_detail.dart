@@ -1,5 +1,6 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/route_manager.dart';
+import 'package:keroma/routes/route_helper.dart';
 import 'package:keroma/utils/colors.dart';
 import 'package:keroma/utils/dimension.dart';
 import 'package:keroma/widgets/app_icon.dart';
@@ -7,6 +8,8 @@ import 'package:keroma/widgets/big_text.dart';
 import 'package:keroma/widgets/expandable_text_widget.dart';
 
 class RecommendedFoodDetail extends StatelessWidget{
+  const RecommendedFoodDetail({Key? key}): super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -14,11 +17,17 @@ class RecommendedFoodDetail extends StatelessWidget{
       body: CustomScrollView(
         slivers: [
           SliverAppBar(
+            automaticallyImplyLeading: false,
             toolbarHeight: 70,
             title: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                AppIcon(icon: Icons.clear),
+                GestureDetector(
+                  onTap: (){
+                    Get.toNamed(RouteHelper.getInitial());
+                  },
+                child: AppIcon(icon: Icons.clear),
+                ),
                 AppIcon(icon: Icons.shopping_cart_checkout_outlined),
               ],
             ),
