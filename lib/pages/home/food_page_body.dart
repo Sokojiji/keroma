@@ -6,6 +6,7 @@ import 'package:keroma/controllers/popular_product_controller.dart';
 import 'package:keroma/controllers/recommended_product_controller.dart';
 import 'package:keroma/models/product_model.dart';
 import 'package:keroma/pages/food/popular_food_detail.dart';
+import 'package:keroma/routes/route_helper.dart';
 import 'package:keroma/utils/app_constants.dart';
 import 'package:keroma/utils/colors.dart';
 import 'package:keroma/utils/dimension.dart';
@@ -79,8 +80,7 @@ class _FoodPageBodyState  extends State<FoodPageBody> {
             activeShape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5.0)),
           ),
         );
-        }
-      ),
+        }),
       //Popular text
       SizedBox(height: Dimensions.height30,),
       Container(
@@ -111,58 +111,63 @@ class _FoodPageBodyState  extends State<FoodPageBody> {
                   shrinkWrap: true,
                   itemCount: recommendedProduct.recommendedProductList.length,
                   itemBuilder: (context, index){
-                    return Container(
-                      margin: EdgeInsets.only(left: Dimensions.width20, right: Dimensions.width20, bottom: Dimensions.height10),
-                      child: Row(
-                        children: [
-                          //Image section
-                          Container(
-                            width:Dimensions.listViewImgSize,
-                            height: Dimensions.listViewImgSize,
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(Dimensions.radius20),
-                                color: Colors.white38,
-                                image: DecorationImage(
-                                  fit: BoxFit.cover,
-                                  image: NetworkImage(
-                                      AppConstants.BASE_URL+AppConstants.UPLOAD_URL+recommendedProduct.recommendedProductList[index].img!
-                                  ),
-                                )
-                            ),
-                          ),
-                          //text container
-                          Expanded(
-                            child: Container(
-                              height: Dimensions.listViewTextContSize,
-
+                    return GestureDetector(
+                      onTap: (){
+                        Get.toNamed(RouteHelper.getRecommendedFood());
+                      },
+                      child: Container(
+                        margin: EdgeInsets.only(left: Dimensions.width20, right: Dimensions.width20, bottom: Dimensions.height10),
+                        child: Row(
+                          children: [
+                            //Image section
+                            Container(
+                              width:Dimensions.listViewImgSize,
+                              height: Dimensions.listViewImgSize,
                               decoration: BoxDecoration(
-                                borderRadius: BorderRadius.only(
-                                  topRight: Radius.circular(Dimensions.radius20),
-                                  bottomRight: Radius.circular(Dimensions.radius20),
-                                ),
-                                color: Colors.white,
+                                  borderRadius: BorderRadius.circular(Dimensions.radius20),
+                                  color: Colors.white38,
+                                  image: DecorationImage(
+                                    fit: BoxFit.cover,
+                                    image: NetworkImage(
+                                        AppConstants.BASE_URL+AppConstants.UPLOAD_URL+recommendedProduct.recommendedProductList[index].img!
+                                    ),
+                                  )
                               ),
-                                child: Padding(
-                                  padding: EdgeInsets.only(left: Dimensions.width10, right: Dimensions.width10),
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      BigText(text: recommendedProduct.recommendedProductList[index].name!),
-                                      SmallText(text: "Hotta than your shawrry, Upus!"),
-                                      Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          IconAndTextWidget(icon: Icons.circle_sharp,text: "Normal",iconColor: AppColors.iconColor1,),
-                                          IconAndTextWidget(icon: Icons.location_on,text: "1.7km",iconColor: AppColors.mainColor,),
-                                          IconAndTextWidget(icon: Icons.access_time_filled_rounded,text: "32min",iconColor: AppColors.iconColor2,),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                ),
                             ),
-                          ),
-                        ],
+                            //text container
+                            Expanded(
+                              child: Container(
+                                height: Dimensions.listViewTextContSize,
+
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.only(
+                                    topRight: Radius.circular(Dimensions.radius20),
+                                    bottomRight: Radius.circular(Dimensions.radius20),
+                                  ),
+                                  color: Colors.white,
+                                ),
+                                  child: Padding(
+                                    padding: EdgeInsets.only(left: Dimensions.width10, right: Dimensions.width10),
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        BigText(text: recommendedProduct.recommendedProductList[index].name!),
+                                        SmallText(text: "Hotta than your shawrry, Upus!"),
+                                        Row(
+                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            IconAndTextWidget(icon: Icons.circle_sharp,text: "Normal",iconColor: AppColors.iconColor1,),
+                                            IconAndTextWidget(icon: Icons.location_on,text: "1.7km",iconColor: AppColors.mainColor,),
+                                            IconAndTextWidget(icon: Icons.access_time_filled_rounded,text: "32min",iconColor: AppColors.iconColor2,),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     );
                   },
