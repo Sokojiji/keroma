@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:keroma/controllers/popular_product_controller.dart';
 import 'package:keroma/pages/home/main_food_page.dart';
 import 'package:keroma/utils/colors.dart';
 
@@ -13,10 +14,14 @@ import 'package:keroma/widgets/expandable_text_widget.dart';
 
 
 class PopularFoodDetail extends StatelessWidget{
-  const PopularFoodDetail({Key? key}) : super(key: key);
+  int pageId;
+  PopularFoodDetail({Key? key, required this.pageId}) : super(key: key);
   
   @override
   Widget build(BuildContext context){
+    var product= Get.find<PopularProductController>().popularProductList[pageId];
+    print("page is id"+pageId.toString());
+    print("product name is id"+product.name.toString());
     return Scaffold(
       backgroundColor: Colors.white,
       body: Stack(
