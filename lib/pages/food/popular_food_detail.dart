@@ -87,7 +87,7 @@ class PopularFoodDetail extends StatelessWidget{
                 ],
               ),
 
-          )
+            )
           ),
           //
         ],

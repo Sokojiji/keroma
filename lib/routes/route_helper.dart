@@ -10,31 +10,28 @@ class RouteHelper{
   
   static String getInitial()=>'$initial';
   static String getPopularFood(int pageId)=>'$popularFood?pageId=$pageId';
-  static String getRecommendedFood()=>'$recommendedFood';
+  static String getRecommendedFood(int pageId, )=>'$recommendedFood?pageId=$pageId';
 
   static List<GetPage> routes=[
     GetPage(name: initial, page: ()=>MainFoodPage()),
 
     GetPage(name: popularFood, page: (){
       var pageId = Get.parameters['pageId'];
-      if(pageId == null) {
-        throw ArgumentError('pageId cannot be null');
-      }
-      return PopularFoodDetail(pageId: int.parse(pageId));
-    },
+     // if(pageId == null) {
+     //   throw ArgumentError('pageId cannot be null');
+      return PopularFoodDetail(pageId: int.parse(pageId!));
+      },
         transition: Transition.fadeIn
     ),
 
     GetPage(name: recommendedFood,
         page: (){
-      return RecommendedFoodDetail ();
-    },
+      var pageId = Get.parameters['pageId'];
+  //if(pageId == null) {
+  return RecommendedFoodDetail (pageId: int.parse(pageId!));
+  },
+
         transition: Transition.fadeIn
     ),
   ];
-
-
-
-
-
 }

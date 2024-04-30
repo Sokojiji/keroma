@@ -8,7 +8,9 @@ import 'package:keroma/widgets/big_text.dart';
 import 'package:keroma/widgets/expandable_text_widget.dart';
 
 class RecommendedFoodDetail extends StatelessWidget{
-  const RecommendedFoodDetail({Key? key}) : super(key: key);
+  final int pageId;
+
+  const RecommendedFoodDetail({Key? key, required this.pageId}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

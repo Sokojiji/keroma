@@ -2,7 +2,8 @@
     package="com.sokojiji.keroma">
     <application
         android:label="keroma"
-        android:icon="@mipmap/ic_launcher">
+        android:name="${applicationName}"
+        >
         <activity
             android:name=".MainActivity"
             android:exported="true">
